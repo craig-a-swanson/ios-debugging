@@ -14,6 +14,7 @@ class EntriesTableViewController: UITableViewController, NSFetchedResultsControl
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // FIXED: added code to fetch the entries from server.
         entryController.fetchEntriesFromServer()
         tableView.reloadData()
         
