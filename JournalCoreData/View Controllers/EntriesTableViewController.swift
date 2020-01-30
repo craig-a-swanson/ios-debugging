@@ -127,6 +127,8 @@ class EntriesTableViewController: UITableViewController, NSFetchedResultsControl
     
     lazy var fetchedResultsController: NSFetchedResultsController<Entry> = {
         let fetchRequest: NSFetchRequest<Entry> = Entry.fetchRequest()
+        
+        // FIXED: Added a sort descriptor for the mood key. That needs to exist and come first due to the sections being based upon it.
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "mood", ascending: false),
             NSSortDescriptor(key: "timestamp", ascending: false)]
         
