@@ -11,6 +11,14 @@ import CoreData
 
 class EntriesTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // FIXED: added code to fetch the entries from server.
+        entryController.fetchEntriesFromServer()
+        tableView.reloadData()
+        
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -93,6 +101,8 @@ class EntriesTableViewController: UITableViewController, NSFetchedResultsControl
         case .delete:
             guard let indexPath = indexPath else { return }
             tableView.deleteRows(at: [indexPath], with: .automatic)
+        @unknown default:
+            return
         }
     }
     
@@ -113,6 +123,9 @@ class EntriesTableViewController: UITableViewController, NSFetchedResultsControl
             
             destinationVC.entry = fetchedResultsController.object(at: indexPath)
             
+            // FIXED: passing this dependency fixed the issue of not saving updates to entries
+            destinationVC.entryController = entryController
+            
         default:
             break
         }
@@ -124,7 +137,10 @@ class EntriesTableViewController: UITableViewController, NSFetchedResultsControl
     
     lazy var fetchedResultsController: NSFetchedResultsController<Entry> = {
         let fetchRequest: NSFetchRequest<Entry> = Entry.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+        
+        // FIXED: Added a sort descriptor for the mood key. That needs to exist and come first due to the sections being based upon it.
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "mood", ascending: false),
+            NSSortDescriptor(key: "timestamp", ascending: false)]
         
         let moc = CoreDataStack.shared.mainContext
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: "mood", cacheName: nil)
