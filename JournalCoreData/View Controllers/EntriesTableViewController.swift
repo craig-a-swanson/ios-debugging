@@ -112,6 +112,8 @@ class EntriesTableViewController: UITableViewController, NSFetchedResultsControl
                 let indexPath = tableView.indexPathForSelectedRow else { return }
             
             destinationVC.entry = fetchedResultsController.object(at: indexPath)
+            
+            // FIXED: passing this dependency fixed the issue of not saving updates to entries
             destinationVC.entryController = entryController
             
         default:

@@ -43,7 +43,7 @@ class EntryDetailViewController: UIViewController {
     
     private func updateViews() {
         
-        // adding isViewLoaded fixed the crash when trying to show journal detail
+        // FIXED: adding isViewLoaded fixed the crash when trying to show journal detail
         guard isViewLoaded else { return }
         guard let entry = entry else {
                 title = "Create Entry"
